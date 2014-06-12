@@ -46,14 +46,14 @@ def problem():
     if ( request.method == 'GET' ):
       # optimizer sends problem_id
       problem_id = request.data
-      print problem_id
+      #print problem_id
 
       # determine current status of problem
       status = r.lindex( problem_id, 1 )
-      print status
+      #print status
 
       # if it's still unscheduled or executing, wait
-      if ( status == 'unscheduled' or status =='executing' ) :
+      if ( status == 'unscheduled' or status[0:9] =='executing' ) :
         p = r.pubsub( ignore_subscribe_messages=True )
         p.subscribe( problem_id );
         for message in p.listen():
@@ -77,10 +77,10 @@ def question():
     else :
       # Pop from queue, mark as executing, and send problem
       problem_id = r.lpop( "queue" )
-      print r.llen( "queue" )
-      print problem_id
+      print "Scheduled job, qsize is", r.llen( "queue" )
+      #print problem_id
       assert( r.exists( problem_id ) )
-      print r.lindex( problem_id, 1 )
+      #print r.lindex( problem_id, 1 )
       r.lset( problem_id, 1, "executing" + str( time.time() ) )
       response = make_response( r.lindex( problem_id, 0 ),
                                 200,
@@ -96,7 +96,7 @@ def answer():
       assert( r.exists( id_of_answer ) )
       answer_protobuf = request.form['answer']
       r.lset( id_of_answer, 1, answer_protobuf )
-      r.publish( id_of_answer )
+      r.publish( id_of_answer, "done" )
       return "OK"
 
 if __name__ == "__main__":

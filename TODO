@@ -1,3 +1,3 @@
 1. Integrate with a real protobuf.
 2. Run a stress test with synthetic traffic workloads.
-3. Persistent connections.
+3. Exception handling within emile_worker.py
