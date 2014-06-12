@@ -1,3 +1,4 @@
-1. Integrate with a real protobuf.
-2. Run a stress test with synthetic traffic workloads.
-3. Exception handling within emile_worker.py
+1. Integrate with a real protobuf and Remy.
+2. Use httplib instead of requests in worker.
+3. Return return_code to the optimiser and handle it.
+4. Get rid of nasty timers.
