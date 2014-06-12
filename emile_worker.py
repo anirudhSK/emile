@@ -1,34 +1,37 @@
 import requests
-import multiprocessing
+import subprocess
 from time import sleep
 from random import random
-import logging
-
-def myfunction(problem_id, problem):
-##  try:
-    sleep_time = random() * 5.0
-    logging.info("Sleep time computed\n");
-    sleep( sleep_time )
-    print "Hello"
-    # TODO: In general, you would do much more than just echo
-    return (problem_id, problem)
-##  except:
-##    logging.critical("Errored out here\n");
-
-def post_answers(problem_tuple):
-  reply = requests.post( 'http://localhost:5000/answer', data = { 'problem_id' : problem_tuple[0], 'answer' : problem_tuple[1] } )
-  logging.info("OK");
-  print reply.text 
-
-pool = multiprocessing.Pool(processes = 40)
+process_handles = []
 while (True):
-  reply = requests.get( 'http://localhost:5000/question' )
-  print "Current pool cache size is", len(pool._cache)
-  if (reply.status_code == 404):
-    print "No problems, sleeping 1 second before trying again"
-    sleep(1)
-    continue
+  if (len(process_handles) == 0):
+    sleep( 1 )
   else:
-    print "applying async to the problem we found\n";
-    pool.apply_async(myfunction, (reply.headers['problem_id'], reply.text), callback = post_answers );
-  # Figure out how to limit the number of tasks
+    sleep( 0.01 )
+
+  # if you have space, fetch jobs
+  if (len(process_handles) < 30):
+    reply = requests.get( 'http://localhost:5000/question' )
+    if ( reply.status_code == 200 ):
+       print "Running the problem we found\n";
+       print "Sleep time ",str(random() * 5.0)
+       args = [ '/bin/sleep', str( random() * 5.0 ) ]
+       process_handles.append( ( subprocess.Popen( args ), reply.text, reply.headers[ 'problem_id' ] ) )
+
+  # check all handles
+  remove_handles = []
+  for i in range( 0, len( process_handles ) ):
+    if (process_handles[i][0].poll() is not None):
+      print "Process return code", process_handles[i][0].returncode
+      remove_handles.append( process_handles[ i ] )
+      post_status = requests.post( 'http://localhost:5000/answer', data = { 'problem_id' : process_handles[i][2], 'answer' : process_handles[i][1] } )
+
+  # reap the ones that are done
+  for handle in remove_handles:
+    print "Removing handle", handle
+    process_handles.remove( handle )
+
+@atexit.register
+def kill_subprocesses():
+  for proc in process_handles:
+    proc[0].kill()

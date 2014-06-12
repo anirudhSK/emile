@@ -1,7 +1,7 @@
 import requests
 import random
 # TODO: Replicate this using libcurl
-NUM_TASKS = 50
+NUM_TASKS = 1000
 problem_id = [''] * NUM_TASKS
 
 for i in range(0, NUM_TASKS):
