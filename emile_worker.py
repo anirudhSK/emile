@@ -1,7 +1,7 @@
 import requests
 import subprocess
+import os
 from time import sleep
-from random import random
 process_handles = []
 problem_file = '/home/anirudh/remy/test.problem'
 remy_binary  = '/home/anirudh/remy/src/rat-runner'
@@ -18,7 +18,13 @@ while (True):
     if ( reply.status_code == 200 ):
        print "Running the problem we found\n";
        args = [ remy_binary, 'problem=' + str(problem_file), 'answer=' + str(answer_file) ]
-       process_handles.append( ( subprocess.Popen( args ), reply.headers[ 'problem_id' ] ) )
+       fnull = open( os.devnull, 'w' )
+       process_handles.append( ( subprocess.Popen( args,
+                                                   stdout = fnull,
+                                                   stderr = subprocess.STDOUT  ),
+                                 reply.headers[ 'problem_id' ]
+                               ),
+                             )
 
   # check all handles
   remove_handles = []
