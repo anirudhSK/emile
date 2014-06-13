@@ -30,7 +30,7 @@ def problem():
       protobuf = request.data
 
       # find the unique problem ID
-      problem_id = md5.new( protobuf ).digest()
+      problem_id = md5.new( protobuf ).hexdigest()
 
       # Queue up job if this problem_id doesn't exist in KV
       if ( not r.exists( problem_id ) ):
