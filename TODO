@@ -1,4 +1,3 @@
-1. Integrate with a real protobuf and Remy.
+1. Integrate with Remy.
 2. Use httplib instead of requests in worker.
-3. Return return_code to the optimiser and handle it.
 4. Get rid of nasty timers.

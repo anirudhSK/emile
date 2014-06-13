@@ -1,7 +1,7 @@
 import requests
 import answer_pb2
 # TODO: Replicate this using libcurl
-NUM_TASKS = 1
+NUM_TASKS = 10
 problem_id = [''] * NUM_TASKS
 problem_file = '/home/anirudh/remy/test.problem'
 
@@ -14,4 +14,4 @@ for i in range(0, NUM_TASKS):
   reply = requests.get( 'http://localhost:5000/problem', data = problem_id[i] )
   answer_proto = answer_pb2.Outcome()
   answer_proto.ParseFromString( reply.content )
-  print str( answer_proto )
+  print reply.headers['return_code']

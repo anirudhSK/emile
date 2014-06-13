@@ -59,12 +59,17 @@ def problem():
         p = r.pubsub( ignore_subscribe_messages=True )
         p.subscribe( problem_id );
         for message in p.listen():
-          return r.lindex( problem_id, 1 )
+          return make_response( r.lindex( problem_id, 1 ),
+                                200,
+                                { 'return_code' : r.lindex( problem_id, 2 ) } )
 
       # else return answer immediately.
       else :
         print "Answering immediately\n";
-        return r.lindex( problem_id, 1 )
+        return make_response( r.lindex( problem_id, 1 ),
+                              200,
+                              { 'return_code' : r.lindex( problem_id, 2 ) } )
+
 
 # URL to GET questions that have been posted
 @app.route("/question", methods = ['GET'])
@@ -81,9 +86,7 @@ def question():
       # Pop from queue, mark as executing, and send problem
       problem_id = r.lpop( "queue" )
       print "Scheduled job, qsize is", r.llen( "queue" )
-      #print problem_id
       assert( r.exists( problem_id ) )
-      #print r.lindex( problem_id, 1 )
       r.lset( problem_id, 1, "executing" + str( time.time() ) )
       response = make_response( r.lindex( problem_id, 0 ),
                                 200,
