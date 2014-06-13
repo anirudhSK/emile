@@ -3,7 +3,7 @@ from flask import request
 from flask import make_response
 from flask import render_template
 import redis
-import uuid
+import md5
 import time
 # What happens when the worker node fails while executing?
 # Ans: Garbage collect it every now and then.
@@ -30,7 +30,7 @@ def problem():
       protobuf = request.data
 
       # pick a unique problem ID
-      problem_id = str( uuid.uuid4() )
+      problem_id = md5.new( protobuf ).digest()
 
       # Insert into redis, mark as unscheduled
       r.rpush( problem_id, protobuf )
