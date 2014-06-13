@@ -1,7 +1,7 @@
 import requests
 import answer_pb2
 # TODO: Replicate this using libcurl
-NUM_TASKS = 50
+NUM_TASKS = 1
 problem_id = [''] * NUM_TASKS
 problem_file = '/home/anirudh/remy/test.problem'
 

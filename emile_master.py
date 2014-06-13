@@ -29,17 +29,17 @@ def problem():
       # problem data from optimizer
       protobuf = request.data
 
-      # pick a unique problem ID
+      # find the unique problem ID
       problem_id = md5.new( protobuf ).digest()
 
-      # Insert into redis, mark as unscheduled
-      r.rpush( problem_id, protobuf )
-      r.rpush( problem_id, 'unscheduled' )
-      r.rpush( problem_id, '-1' )
-
-      # Queue up job
-      r.rpush( "queue", problem_id )
-      print "Queue length", r.llen("queue")
+      # Queue up job if this problem_id doesn't exist in KV
+      if ( not r.exists( problem_id ) ):
+        # Insert into redis, mark as unscheduled
+        r.rpush( problem_id, protobuf )
+        r.rpush( problem_id, 'unscheduled' )
+        r.rpush( problem_id, '-1' )
+        r.rpush( "queue", problem_id )
+        print "Queue length", r.llen("queue")
 
       # return problem id to optimizer
       return problem_id
@@ -47,11 +47,12 @@ def problem():
     if ( request.method == 'GET' ):
       # optimizer sends problem_id
       problem_id = request.data
-      #print problem_id
 
       # determine current status of problem
       status = r.lindex( problem_id, 1 )
-      #print status
+
+      # make sure it exists
+      assert( r.exists( problem_id ) )
 
       # if it's still unscheduled or executing, wait
       if ( status == 'unscheduled' or status[0:9] =='executing' ) :
@@ -62,6 +63,7 @@ def problem():
 
       # else return answer immediately.
       else :
+        print "Answering immediately\n";
         return r.lindex( problem_id, 1 )
 
 # URL to GET questions that have been posted
