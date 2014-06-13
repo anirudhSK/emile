@@ -1,4 +1,5 @@
 import requests
+import httplib
 import subprocess
 import os
 from time import sleep
@@ -13,16 +14,18 @@ while (True):
 
   # if you have space, fetch jobs
   if (len(process_handles) < 30):
-    reply = requests.get( 'http://localhost:5000/question' )
-    if ( reply.status_code == 200 ):
+    http_get = httplib.HTTPConnection( 'localhost:5000' );
+    http_get.request( 'GET', '/question' );
+    reply = http_get.getresponse()
+    if ( reply.status == 200 ):
        print "Running the problem we found\n";
-       open( "/tmp/problem", "wb").write( reply.content )
+       open( "/tmp/problem", "wb").write( reply.read() )
        args = [ remy_binary, 'problem=/tmp/problem', 'answer=' + str(answer_file) ]
        fnull = open( os.devnull, 'w' )
        process_handles.append( ( subprocess.Popen( args,
                                                    stdout = fnull,
                                                    stderr = subprocess.STDOUT  ),
-                                 reply.headers[ 'problem_id' ]
+                                 reply.getheader( 'problem_id' )
                                ),
                              )
 
@@ -32,10 +35,14 @@ while (True):
     if (process_handles[i][0].poll() is not None):
       return_code  = process_handles[i][0].returncode
       remove_handles.append( process_handles[ i ] )
-      post_status = requests.post( 'http://localhost:5000/answer',
-                                    headers = { 'problem_id' : process_handles[i][1],
-                                                'return_code': return_code },
-                                    data = open( answer_file, 'rb' ).read() )
+      http_post = httplib.HTTPConnection( 'localhost:5000' )
+      http_post.request( 'POST', '/answer',
+                         body = open( answer_file, 'rb' ).read(),
+                         headers = { 'problem_id' : process_handles[i][1],
+                                     'return_code': return_code } )
+      post_status = http_post.getresponse()
+      assert( post_status.status == 200 );
+      assert( post_status.read() == "OK" );
 
   # reap the ones that are done
   for handle in remove_handles:
