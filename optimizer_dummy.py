@@ -11,7 +11,8 @@ for i in range(0, NUM_TASKS):
   problem_id[i] = reply.content
 
 for i in range(0, NUM_TASKS):
-  reply = requests.get( 'http://localhost:5000/problem', data = problem_id[i] )
+  reply = requests.get( url = 'http://localhost:5000/problem',\
+                        headers = { 'problem_id' : problem_id[i] } )
   answer_proto = answer_pb2.Outcome()
   answer_proto.ParseFromString( reply.content )
   print reply.headers['return_code']

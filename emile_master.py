@@ -46,7 +46,7 @@ def problem():
 
     if ( request.method == 'GET' ):
       # optimizer sends problem_id
-      problem_id = request.data
+      problem_id = request.headers[ 'problem_id' ]
 
       # determine current status of problem
       status = r.lindex( problem_id, 1 )

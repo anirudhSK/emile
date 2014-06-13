@@ -1,3 +1,2 @@
 1. Integrate with Remy using libcurl.
-2. Caching across restarts of emile_master.py
 4. Get rid of nasty timers.
