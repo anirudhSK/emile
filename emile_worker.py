@@ -3,9 +3,9 @@ import subprocess
 from time import sleep
 from random import random
 process_handles = []
-problem_file = '/usr/local/google/home/anirudhsk/remy/test.problem'
-remy_binary  = '/usr/local/google/home/anirudhsk/remy/src/rat-runner'
-answer_file =  '/usr/local/google/home/anirudhsk/remy/src/test.answer'
+problem_file = '/home/anirudh/remy/test.problem'
+remy_binary  = '/home/anirudh/remy/src/rat-runner'
+answer_file =  '/home/anirudh/remy/src/test.answer'
 while (True):
   if (len(process_handles) == 0):
     sleep( 1 )
@@ -27,9 +27,9 @@ while (True):
       return_code  = process_handles[i][0].returncode
       remove_handles.append( process_handles[ i ] )
       post_status = requests.post( 'http://localhost:5000/answer',
-                                    data = { 'problem_id' : process_handles[i][1],
-                                             'answer' :  open(answer_file, 'rb').read(),
-                                             'return_code' : return_code } )
+                                    headers = { 'problem_id' : process_handles[i][1],
+                                                'return_code': return_code },
+                                    data = open( answer_file, 'rb' ).read() )
 
   # reap the ones that are done
   for handle in remove_handles:

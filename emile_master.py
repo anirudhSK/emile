@@ -93,10 +93,10 @@ def question():
 def answer():
     # worker is POSTing answer
     if ( request.method == 'POST' ):
-      id_of_answer = request.form[ 'problem_id' ];
+      id_of_answer = request.headers[ 'problem_id' ];
       assert( r.exists( id_of_answer ) )
-      r.lset( id_of_answer, 1, request.form[ 'answer' ] )
-      r.lset( id_of_answer, 2, request.form[ 'return_code' ] )
+      r.lset( id_of_answer, 1, request.data )
+      r.lset( id_of_answer, 2, request.headers[ 'return_code' ] )
       r.publish( id_of_answer, "done" )
       return "OK"
 

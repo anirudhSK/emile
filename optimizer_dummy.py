@@ -14,4 +14,3 @@ for i in range(0, NUM_TASKS):
   answer_proto = answer_pb2.Outcome()
   open("/tmp/interim", "wb").write( reply.content );
   answer_proto.ParseFromString( reply.content )#/usr/local/google/home/anirudhsk/remy/src/test.answer )
-##  open( "/tmp/recreated", "wb").write( answer_proto.SerializeToString() );
