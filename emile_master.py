@@ -35,6 +35,7 @@ def problem():
       # Insert into redis, mark as unscheduled
       r.rpush( problem_id, protobuf )
       r.rpush( problem_id, 'unscheduled' )
+      r.rpush( problem_id, '-1' )
 
       # Queue up job
       r.rpush( "queue", problem_id )
@@ -92,10 +93,10 @@ def question():
 def answer():
     # worker is POSTing answer
     if ( request.method == 'POST' ):
-      id_of_answer = request.form['problem_id'];
+      id_of_answer = request.form[ 'problem_id' ];
       assert( r.exists( id_of_answer ) )
-      answer_protobuf = request.form['answer']
-      r.lset( id_of_answer, 1, answer_protobuf )
+      r.lset( id_of_answer, 1, request.form[ 'answer' ] )
+      r.lset( id_of_answer, 2, request.form[ 'return_code' ] )
       r.publish( id_of_answer, "done" )
       return "OK"
 

@@ -17,7 +17,7 @@ while (True):
     reply = requests.get( 'http://localhost:5000/question' )
     if ( reply.status_code == 200 ):
        print "Running the problem we found\n";
-       args = [ remy_binary, 'problem='+str(problem_file), 'answer='+str(answer_file) ]
+       args = [ remy_binary, 'problem=' + str(problem_file), 'answer=' + str(answer_file) ]
        process_handles.append( ( subprocess.Popen( args ), reply.headers[ 'problem_id' ] ) )
 
   # check all handles
@@ -28,7 +28,7 @@ while (True):
       remove_handles.append( process_handles[ i ] )
       post_status = requests.post( 'http://localhost:5000/answer',
                                     data = { 'problem_id' : process_handles[i][1],
-                                             'answer' : open(answer_file, 'rb').read(),
+                                             'answer' :  open(answer_file, 'rb').read(),
                                              'return_code' : return_code } )
 
   # reap the ones that are done
