@@ -3,7 +3,6 @@ import subprocess
 import os
 from time import sleep
 process_handles = []
-problem_file = '/home/anirudh/remy/test.problem'
 remy_binary  = '/home/anirudh/remy/src/rat-runner'
 answer_file =  '/home/anirudh/remy/src/test.answer'
 while (True):
@@ -17,7 +16,8 @@ while (True):
     reply = requests.get( 'http://localhost:5000/question' )
     if ( reply.status_code == 200 ):
        print "Running the problem we found\n";
-       args = [ remy_binary, 'problem=' + str(problem_file), 'answer=' + str(answer_file) ]
+       open( "/tmp/problem", "wb").write( reply.content )
+       args = [ remy_binary, 'problem=/tmp/problem', 'answer=' + str(answer_file) ]
        fnull = open( os.devnull, 'w' )
        process_handles.append( ( subprocess.Popen( args,
                                                    stdout = fnull,
