@@ -3,7 +3,7 @@ import answer_pb2
 # TODO: Replicate this using libcurl
 NUM_TASKS = 10
 problem_id = [''] * NUM_TASKS
-problem_file = '/home/anirudh/remy/test.problem'
+problem_file = '/usr/local/google/home/anirudhsk/remy/test.problem'
 
 for i in range(0, NUM_TASKS):
   reply = requests.post( url  = 'http://localhost:5000/problem',
