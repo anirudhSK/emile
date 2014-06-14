@@ -48,11 +48,11 @@ def problem():
       # optimizer sends problem_id
       problem_id = request.headers[ 'problem_id' ]
 
-      # determine current status of problem
-      status = r.lindex( problem_id, 1 )
-
       # make sure it exists
       assert( r.exists( problem_id ) )
+
+      # determine current status of problem
+      status = r.lindex( problem_id, 1 )
 
       # if it's still unscheduled or executing, wait
       if ( status == 'unscheduled' or status[0:9] =='executing' ) :
