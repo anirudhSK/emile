@@ -19,12 +19,12 @@ while (True):
     http_get.request( 'GET', '/question' );
     reply = http_get.getresponse()
     if ( reply.status == 200 ):
-       print "Running the problem we found\n";
        problem_fd = tempfile.NamedTemporaryFile()
        answer_fd  = tempfile.NamedTemporaryFile()
        problem_fd.write( reply.read() )
        problem_fd.flush()
        args = [ remy_binary, 'problem=' + problem_fd.name, 'answer=' + answer_fd.name ]
+       print "Running the problem we found with", args, "\n";
        fnull = open( os.devnull, 'w' )
        process_handles.append( { 'process' : subprocess.Popen( args,
                                                                stdout = fnull,
