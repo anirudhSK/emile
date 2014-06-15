@@ -1,4 +1,3 @@
-import requests
 import httplib
 import subprocess
 import os
