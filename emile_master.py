@@ -59,6 +59,7 @@ def problem():
         p = r.pubsub( ignore_subscribe_messages=True )
         p.subscribe( problem_id );
         for message in p.listen():
+          p.close() # Close pubsub connection
           return make_response( r.lindex( problem_id, 1 ),
                                 200,
                                 { 'return_code' : r.lindex( problem_id, 2 ) } )
