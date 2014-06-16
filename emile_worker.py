@@ -17,6 +17,7 @@ while (True):
     http_get = httplib.HTTPConnection( 'localhost:5000' );
     http_get.request( 'GET', '/question' );
     reply = http_get.getresponse()
+    http_get.close()
     if ( reply.status == 200 ):
        problem_fd = tempfile.NamedTemporaryFile()
        answer_fd  = tempfile.NamedTemporaryFile()
@@ -49,6 +50,7 @@ while (True):
       assert( post_status.status == 200 );
       assert( post_status.read() == "OK" );
       # Close tmp files and reap dead processes
+      http_post.close()
       process_handles[i]['problem'].close();
       process_handles[i]['answer'].close();
       remove_handles.append( process_handles[ i ] )
