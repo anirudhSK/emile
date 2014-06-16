@@ -14,8 +14,8 @@ while (True):
 
   # if you have space, fetch jobs
   if (len(process_handles) < 30):
-    http_get = httplib.HTTPConnection( 'localhost:5000' );
-    http_get.request( 'GET', '/question' );
+    http_get = httplib.HTTPConnection( 'localhost:80' );
+    http_get.request( 'GET', '/question', '', { 'Host' : 'www.emile.com' } );
     reply = http_get.getresponse()
     http_get.close()
     if ( reply.status == 200 ):
@@ -40,12 +40,13 @@ while (True):
   for i in range( 0, len( process_handles ) ):
     if (process_handles[i]['process'].poll() is not None):
       return_code  = process_handles[i]['process'].returncode
-      http_post = httplib.HTTPConnection( 'localhost:5000' )
+      http_post = httplib.HTTPConnection( 'localhost:80' );
       process_handles[i]['answer'].flush();
       http_post.request( 'POST', '/answer',
                          body = process_handles[i]['answer'].read(),
                          headers = { 'problem_id' : process_handles[i]['id'],
-                                     'return_code': return_code } )
+                                     'return_code': return_code,
+                                     'Host'       : 'www.emile.com' } )
       post_status = http_post.getresponse()
       assert( post_status.status == 200 );
       assert( post_status.read() == "OK" );
