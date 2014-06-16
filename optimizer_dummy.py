@@ -1,6 +1,5 @@
 import requests
 import answer_pb2
-# TODO: Replicate this using libcurl
 NUM_TASKS = 10
 problem_id = [''] * NUM_TASKS
 problem_file = '/usr/local/google/home/anirudhsk/remy/test.problem'
