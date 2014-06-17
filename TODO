@@ -1,2 +1,5 @@
 4. Get rid of nasty timers.
 5. Need to compile everything from source.
+1. BadStatusLine errors.
+2. Minimize the number of REDIS connections overall.
+3. Adaptive backoff timer for GETs
