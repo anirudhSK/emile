@@ -60,17 +60,11 @@ def problem():
       # determine current status of problem
       status = flask.g.redis.lindex( problemid, 1 )
 
-      # if it's still unscheduled or executing, wait
+      # if it's still unscheduled or executing, return Processing to client
       if ( status == 'unscheduled' or status[0:9] =='executing' ) :
-        p = flask.g.redis.pubsub( ignore_subscribe_messages=True )
-        p.subscribe( problemid );
-        print "Still waiting ..."
-        for message in p.listen():
-          print "Got notification"
-          p.close() # Close pubsub connection
-          return make_response( flask.g.redis.lindex( problemid, 1 ),
-                                200,
-                                { 'returncode' : flask.g.redis.lindex( problemid, 2 ) } )
+        return make_response( status,
+                              202,
+                              { 'returncode' : -1 } )
 
       # else return answer immediately.
       else :
@@ -111,7 +105,6 @@ def answer():
       assert( flask.g.redis.exists( id_of_answer ) )
       flask.g.redis.lset( id_of_answer, 1, request.data )
       flask.g.redis.lset( id_of_answer, 2, request.headers[ 'returncode' ] )
-      flask.g.redis.publish( id_of_answer, "done" )
       return "OK"
 
 if __name__ == "__main__":

@@ -25,7 +25,7 @@ while (True):
        problem_fd.write( reply.read() )
        problem_fd.flush()
        args = [ remy_binary, 'problem=' + problem_fd.name, 'answer=' + answer_fd.name ]
-       print "Running the problem we found with", args, " problemid is", reply.getheader( 'problemid' ), "\n";
+       print "Running the problem with problemid is", reply.getheader( 'problemid' ), "\n";
        fnull = open( os.devnull, 'w' )
        process_handles.append( { 'process' : subprocess.Popen( args,
                                                                stdout = fnull,
@@ -44,7 +44,6 @@ while (True):
     if (process_handles[i]['process'].poll() is not None):
       returncode  = process_handles[i]['process'].returncode
       process_handles[i]['answer'].flush();
-      print "POSTing answer to problemid ", process_handles[i]['id']
       http_post.request( 'POST', '/answer',
                          body = process_handles[i]['answer'].read(),
                          headers = { 'problemid' : process_handles[i]['id'],
@@ -60,7 +59,6 @@ while (True):
 
   # reap the ones that are done
   for handle in remove_handles:
-    print "Removing handle", handle
     process_handles.remove( handle )
 
 @atexit.register
