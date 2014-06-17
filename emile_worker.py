@@ -24,12 +24,12 @@ while (True):
        problem_fd.write( reply.read() )
        problem_fd.flush()
        args = [ remy_binary, 'problem=' + problem_fd.name, 'answer=' + answer_fd.name ]
-       print "Running the problem we found with", args, "\n";
+       print "Running the problem we found with", args, " problemid is", reply.getheader( 'problemid' ), "\n";
        fnull = open( os.devnull, 'w' )
        process_handles.append( { 'process' : subprocess.Popen( args,
                                                                stdout = fnull,
                                                                stderr = subprocess.STDOUT  ),
-                                 'id'      : reply.getheader( 'problem_id' ),
+                                 'id'      : reply.getheader( 'problemid' ),
                                  'problem' : problem_fd,
                                  'answer'  : answer_fd
                                },
@@ -39,13 +39,14 @@ while (True):
   remove_handles = []
   for i in range( 0, len( process_handles ) ):
     if (process_handles[i]['process'].poll() is not None):
-      return_code  = process_handles[i]['process'].returncode
+      returncode  = process_handles[i]['process'].returncode
       http_post = httplib.HTTPConnection( 'localhost:80' );
       process_handles[i]['answer'].flush();
+      print "POSTing answer to problemid ", process_handles[i]['id']
       http_post.request( 'POST', '/answer',
                          body = process_handles[i]['answer'].read(),
-                         headers = { 'problem_id' : process_handles[i]['id'],
-                                     'return_code': return_code,
+                         headers = { 'problemid' : process_handles[i]['id'],
+                                     'returncode': returncode,
                                      'Host'       : 'www.emile.com' } )
       post_status = http_post.getresponse()
       assert( post_status.status == 200 );
