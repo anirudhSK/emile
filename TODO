@@ -1,6 +1,6 @@
 4. Get rid of nasty timers.
 5. Need to compile everything from source.
 1. BadStatusLine errors. (I think increasing the KeepAliveTimeOut will fix this.)
-3. Adaptive backoff timer for GETs
 6. Transaction semantics within REDIS.
 7. Apache's arbitrary SIGUSR1 restarts.
+8. Check that UNIX sockets are enabled before starting REDIS.
