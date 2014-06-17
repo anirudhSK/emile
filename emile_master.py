@@ -22,6 +22,7 @@ except redis.ConnectionError:
 
 # Setup Flask
 app = Flask(__name__)
+app.debug = True
 
 @app.before_request
 def connect_to_redis():
@@ -114,5 +115,4 @@ def answer():
       return "OK"
 
 if __name__ == "__main__":
-    app.debug = True
     app.run( threaded = True, host = '0.0.0.0', port = 80 )
