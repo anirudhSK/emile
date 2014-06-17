@@ -9,8 +9,8 @@ import time
 # What happens when the worker node fails while executing?
 # Ans: Garbage collect it every now and then.
 
-# Setup Redis
-redis_conn = redis.StrictRedis(host='localhost', port=6379, db=0)
+# Setup Redis, TODO: Automatically check that UNIX sockets are enabled
+redis_conn = redis.StrictRedis(unix_socket_path='/var/run/redis/redis.sock', db=0)
 redis_conn.flushall()
 
 # Check that redis is actually running
@@ -26,7 +26,7 @@ app.debug = True
 
 @app.before_request
 def connect_to_redis():
-      flask.g.redis = redis.StrictRedis(host='localhost', port=6379, db=0)
+      flask.g.redis = redis.StrictRedis(unix_socket_path='/var/run/redis/redis.sock', db=0)
 
 # URL to POST problems from optimizer and GET answers
 @app.route("/problem", methods = ['POST', 'GET'])
