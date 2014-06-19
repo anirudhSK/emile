@@ -1,8 +1,9 @@
 import requests
 import answer_pb2
+import sys
 NUM_TASKS = 10
 problemid = [''] * NUM_TASKS
-problem_file = '/usr/local/google/home/anirudhsk/remy/test.problem'
+problem_file = sys.argv[ 1 ]
 
 for i in range(0, NUM_TASKS):
   reply = requests.post( url  = 'http://localhost:80/problem',
