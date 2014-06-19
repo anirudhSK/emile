@@ -15,7 +15,9 @@ for i in range(0, NUM_TASKS):
 for i in range(0, NUM_TASKS):
   reply = requests.get( url = 'http://localhost:80/problem',
                         headers = { 'problemid' : problemid[i], 'Host' : 'www.emile.com' } )
-  answer_proto = answer_pb2.Outcome()
-  print reply.content
-  answer_proto.ParseFromString( reply.content )
-  print reply.headers['returncode']
+  print reply.status_code
+  if ( reply.status_code  == 200 ) :
+    answer_proto = answer_pb2.Outcome()
+    print reply.content
+    answer_proto.ParseFromString( reply.content )
+    print reply.headers['returncode']
