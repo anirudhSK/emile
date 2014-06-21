@@ -4,9 +4,9 @@ exec { "apt-get update":
       path => $sys_path,
 }
 
-$basic_packages = ['apache2', 'python-pip', 'libcurl4-openssl-dev',
-                   'libboost-all-dev', 'libprotobuf-dev', 'protobuf-compiler',
-                   'git', 'libapache2-mod-wsgi', 'redis-server',
+$basic_packages = ['apache2', 'python-pip', 'zip', 'libcurl4-openssl-dev',
+                   'libboost1.48-all-dev', 'libprotobuf-dev', 'protobuf-compiler',
+                   'git', 'libapache2-mod-wsgi', 'redis-server', automake,
                    'autoconf', 'build-essential', 'libtool', 'pkg-config', 'htop' ]
 
 package { $basic_packages:
