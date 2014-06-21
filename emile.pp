@@ -36,11 +36,19 @@ service { "redis-server":
       require => Package["redis-server"],
 }
 
-# Copy over redis conf to enable UNIX sockets
-file { '/etc/redis/redis.conf':
-      content => template('redis.templ'),
+# Enable UNIX sockets
+file_line { 'unixsocket':
+      path    => "/etc/redis/redis.conf",
+      match   => "^.*unixsocket./var/run/redis/redis.sock$",
+      line => "unixsocket /var/run/redis/redis.sock",
       notify  => Service["redis-server"],
       require => Package["redis-server"]
+}
+
+file { '/etc/redis/redis.conf':
+      mode => 777,
+      require => Package["redis-server"],
+      notify  => Service["redis-server"]
 }
 
 # APACHE
