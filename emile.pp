@@ -14,17 +14,7 @@ package { $basic_packages:
       require => Exec["apt-get update"],
 }
 
-exec {"pip install flask":
-      path    => $sys_path,
-      require => Package[$basic_packages],
-}
-
-exec {"pip install redis":
-      path    => $sys_path,
-      require => Package[$basic_packages],
-}
-
-exec {"pip install protobuf":
+exec {"pip install flask requests redis protobuf":
       path    => $sys_path,
       require => Package[$basic_packages],
 }
