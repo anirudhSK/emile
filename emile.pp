@@ -51,8 +51,10 @@ service { "apache2":
 }
 
 # Increase timeout for Apache keep-alive messages to 1000 seconds
-file { '/etc/apache2/apache2.conf':
-      content => template('apache2.templ'),
+file_line { 'keepalive_line':
+      path => "/etc/apache2/apache2.conf",
+      match => "^KeepAliveTimeout.*$",
+      line => "KeepAliveTimeout 1000",
       notify  => Service["apache2"],
       require => Package["apache2"]
 }
