@@ -53,7 +53,6 @@ file_line { 'keepalive_line':
       path => "/etc/apache2/apache2.conf",
       match => "^KeepAliveTimeout.*$",
       line => "KeepAliveTimeout 1000",
-      notify  => Service["apache2"],
       require => Package["apache2"]
 }
 
@@ -84,7 +83,8 @@ file { '/etc/apache2/sites-enabled/emile_master.conf':
       notify => Service["apache2"],
       content => template('emile_master.conf'),
       require => [ File["/var/www/emile_master/emile_master.py"],
-                   File["/var/www/emile_master/emile_master.wsgi"] ],
+                   File["/var/www/emile_master/emile_master.wsgi"],
+                   File_line["keepalive_line"] ],
 }
 
 # TODO: SIGUSR1 errors
