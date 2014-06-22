@@ -37,14 +37,15 @@ def problem():
       # find the unique problem ID
       problemid = md5.new( protobuf ).hexdigest()
 
-      # Queue up job if this problemid doesn't exist in KV
-      if ( not flask.g.redis.exists( problemid ) ):
-        # Insert into redis, mark as unscheduled
-        flask.g.redis.rpush( problemid, protobuf )
-        flask.g.redis.rpush( problemid, 'unscheduled' )
-        flask.g.redis.rpush( problemid, '-1' )
-        flask.g.redis.rpush( "queue", problemid )
-        print "Pushed ",problemid, "into queue"
+      # problemid cannot be in KV, else something is wrong
+      assert ( not flask.g.redis.exists( problemid ) )
+
+      # Insert into redis, mark as unscheduled
+      flask.g.redis.rpush( problemid, protobuf )
+      flask.g.redis.rpush( problemid, 'unscheduled' )
+      flask.g.redis.rpush( problemid, '-1' )
+      flask.g.redis.rpush( "queue", problemid )
+      print "Pushed ",problemid, "into queue"
 
       # return problem id to optimizer
       return problemid
