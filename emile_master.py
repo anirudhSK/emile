@@ -44,7 +44,7 @@ def problem():
         flask.g.redis.rpush( problemid, 'unscheduled' )
         flask.g.redis.rpush( problemid, '-1' )
         flask.g.redis.rpush( "queue", problemid )
-        print "Queue length", flask.g.redis.llen("queue")
+        print "Pushed ",problemid, "into queue"
 
       # return problem id to optimizer
       return problemid
@@ -86,8 +86,7 @@ def question():
     # Dequeue one problem alone
     else :
       # Pop from queue, mark as executing, and send problem
-      problemid = flask.g.redis.lpop( "queue" )
-      print "Scheduled job, qsize is", flask.g.redis.llen( "queue" )
+      print "Scheduled job with problemid", problemid
       assert( flask.g.redis.exists( problemid ) )
       flask.g.redis.lset( problemid, 1, "executing" + str( time.time() ) )
       response = make_response( flask.g.redis.lindex( problemid, 0 ),
