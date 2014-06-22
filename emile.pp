@@ -37,8 +37,7 @@ file_line { 'unixsocket':
 
 file { '/var/run/redis/redis.sock':
       mode => 777,
-      require => Package["redis-server"],
-      notify  => Service["redis-server"]
+      require => Service["redis-server"]
 }
 
 # APACHE
