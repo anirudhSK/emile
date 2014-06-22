@@ -79,11 +79,12 @@ def question():
     # worker is requesting work
     assert ( request.method == 'GET' )
 
-    # No jobs in queue
-    if ( flask.g.redis.llen( "queue" ) == 0 ):
+    # Dequeue upto one problem
+    problemid = flask.g.redis.lpop( "queue" )
+    if ( problemid is None ):
+      # No jobs in queue
       response = make_response( "No jobs!", 404 )
 
-    # Dequeue one problem alone
     else :
       # Pop from queue, mark as executing, and send problem
       print "Scheduled job with problemid", problemid
