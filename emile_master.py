@@ -11,7 +11,6 @@ import time
 
 # Setup Redis, TODO: Automatically check that UNIX sockets are enabled
 redis_conn = redis.StrictRedis(unix_socket_path='/var/run/redis/redis.sock', db=0)
-redis_conn.flushall()
 
 # Check that redis is actually running
 try:
