@@ -2,10 +2,12 @@ import httplib
 import subprocess
 import os
 import tempfile
+import sys
 from time import sleep
 
 http_get = httplib.HTTPConnection( 'localhost:80' );
 http_post = httplib.HTTPConnection( 'localhost:80' );
+POOL_SIZE = int(sys.argv[1])
 
 process_handles = []
 remy_binary  = '/usr/local/google/home/anirudhsk/remy/src/rat-runner'
@@ -16,7 +18,7 @@ while (True):
     sleep( 0.01 )
 
   # if you have space, fetch jobs
-  if (len(process_handles) < 30):
+  if (len(process_handles) < POOL_SIZE):
     http_get.request( 'GET', '/question', '', { 'Host' : 'www.emile.com' } );
     reply = http_get.getresponse()
     if ( reply.status == 200 ):
