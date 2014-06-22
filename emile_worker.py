@@ -46,6 +46,8 @@ while (True):
                              )
     else :
        reply.read()
+       # Can either be 404 or 200, nothing else
+       assert( reply.status == 404 )
 
   # check all handles
   remove_handles = []
