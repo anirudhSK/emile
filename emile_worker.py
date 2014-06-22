@@ -5,8 +5,8 @@ import tempfile
 import sys
 from time import sleep
 
-http_get = httplib.HTTPConnection( 'localhost:80' );
-http_post = httplib.HTTPConnection( 'localhost:80' );
+http_get = httplib.HTTPConnection( sys.argv[2] );
+http_post = httplib.HTTPConnection( sys.argv[2] );
 POOL_SIZE = int(sys.argv[1])
 
 process_handles = []
