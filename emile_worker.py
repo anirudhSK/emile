@@ -5,12 +5,19 @@ import tempfile
 import sys
 from time import sleep
 
-http_get = httplib.HTTPConnection( sys.argv[2] );
-http_post = httplib.HTTPConnection( sys.argv[2] );
+if (len(sys.argv) < 4):
+  print "Usage: python emile_worker.py POOL_SIZE server_addr remy_binary"
+  exit(1)
+
+POOL_SIZE = int( sys.argv[1] )
+server_addr = sys.argv[2]
+remy_binary = sys.argv[3]
+
+http_get = httplib.HTTPConnection( server_addr );
+http_post = httplib.HTTPConnection( server_addr );
 POOL_SIZE = int(sys.argv[1])
 
 process_handles = []
-remy_binary  = '/usr/local/google/home/anirudhsk/remy/src/rat-runner'
 while (True):
   if (len(process_handles) == 0):
     sleep( 1 )
