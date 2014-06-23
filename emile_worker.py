@@ -75,10 +75,3 @@ while (True):
   # reap the ones that are done
   for handle in remove_handles:
     process_handles.remove( handle )
-
-@atexit.register
-def kill_subprocesses():
-  for proc in process_handles:
-    proc[0].kill()
-  http_get.close()
-  http_post.close()
