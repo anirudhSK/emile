@@ -17,6 +17,22 @@ http_get = httplib.HTTPConnection( server_addr );
 http_post = httplib.HTTPConnection( server_addr );
 POOL_SIZE = int(sys.argv[1])
 
+def reap_process( proc, http_post ):
+  assert( proc['process'].poll() is not None )
+  returncode  = proc['process'].returncode
+  proc['answer'].flush();
+  http_post.request( 'POST', '/answer',
+                     body = proc['answer'].read(),
+                     headers = { 'problemid' : proc['id'],
+                                 'returncode': returncode,
+                                 'Host'       : 'www.emile.com' } )
+  post_status = http_post.getresponse()
+  assert( post_status.status == 200 );
+  assert( post_status.read() == "OK" );
+  # Close tmp files and reap dead processes
+  proc['problem'].close();
+  proc['answer'].close();
+
 process_handles = []
 while (True):
   if (len(process_handles) == 0):
@@ -53,19 +69,7 @@ while (True):
   remove_handles = []
   for i in range( 0, len( process_handles ) ):
     if (process_handles[i]['process'].poll() is not None):
-      returncode  = process_handles[i]['process'].returncode
-      process_handles[i]['answer'].flush();
-      http_post.request( 'POST', '/answer',
-                         body = process_handles[i]['answer'].read(),
-                         headers = { 'problemid' : process_handles[i]['id'],
-                                     'returncode': returncode,
-                                     'Host'       : 'www.emile.com' } )
-      post_status = http_post.getresponse()
-      assert( post_status.status == 200 );
-      assert( post_status.read() == "OK" );
-      # Close tmp files and reap dead processes
-      process_handles[i]['problem'].close();
-      process_handles[i]['answer'].close();
+      reap_process( process_handles[ i ], http_post );
       remove_handles.append( process_handles[ i ] )
 
   # reap the ones that are done
