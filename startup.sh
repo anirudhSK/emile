@@ -2,6 +2,7 @@
 set -x
 sudo service apache2 stop
 sudo service redis-server restart
+sleep 1 # wait a while for redis-server to restart
 redis-cli flushall
 sudo rm /var/log/apache2/error.log
 sudo rm /var/log/apache2/other_vhosts_access.log
