@@ -1,6 +1,7 @@
 #! /bin/bash
 set -x
 sudo service apache2 stop
+sudo service redis-server restart
 redis-cli flushall
 sudo rm /var/log/apache2/error.log
 sudo cp emile_master.py /var/www/emile_master
