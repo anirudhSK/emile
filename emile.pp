@@ -35,9 +35,16 @@ file_line { 'unixsocket':
       require => Package["redis-server"]
 }
 
+# Change permissions to allow Apache to access it
 file { '/var/run/redis/redis.sock':
       mode => 777,
       require => Service["redis-server"]
+}
+
+# Flush redis
+exec { 'redis-cli flushall':
+      path => $sys_path,
+      require => File['/var/run/redis/redis.sock']
 }
 
 # APACHE
@@ -52,7 +59,8 @@ file_line { 'keepalive_line':
       path => "/etc/apache2/apache2.conf",
       match => "^KeepAliveTimeout.*$",
       line => "KeepAliveTimeout 1000",
-      require => Package["apache2"]
+      require => Package["apache2"],
+      notify => Service["apache2"]
 }
 
 # copy emile scripts to /var/www
@@ -84,6 +92,21 @@ file { '/etc/apache2/sites-enabled/emile_master.conf':
       require => [ File["/var/www/emile_master/emile_master.py"],
                    File["/var/www/emile_master/emile_master.wsgi"],
                    File_line["keepalive_line"] ],
+}
+
+# Clear out logs
+file { 'empty_error_log':
+       path    => '/var/log/apache2/error.log',
+       ensure  => absent,
+       require => Package["apache2"],
+       notify  => Service["apache2"]
+}
+
+file { 'empty_vhosts_log':
+       path    => '/var/log/apache2/other_vhosts_access.log',
+       ensure  => absent,
+       require => Package["apache2"],
+       notify  => Service["apache2"]
 }
 
 # TODO: SIGUSR1 errors
