@@ -41,9 +41,7 @@ def problem():
       assert ( not flask.g.redis.exists( problemid ) )
 
       # Insert into redis, mark as unscheduled
-      flask.g.redis.rpush( problemid, protobuf )
-      flask.g.redis.rpush( problemid, 'unscheduled' )
-      flask.g.redis.rpush( problemid, '-1' )
+      flask.g.redis.hmset( problemid, {'pb': protobuf, 'status' : 'unscheduled', 'retcode' : '-1' } );
       flask.g.redis.rpush( "queue", problemid )
       print "Pushed ",problemid, "into queue"
 
@@ -58,20 +56,20 @@ def problem():
       assert( flask.g.redis.exists( problemid ) )
 
       # determine current status of problem
-      status = flask.g.redis.lindex( problemid, 1 )
+      problem_dict = flask.g.redis.hgetall( problemid )
 
       # if it's still unscheduled or executing, return Processing to client
-      if ( status == 'unscheduled' or status[0:9] =='executing' ) :
-        return make_response( status,
+      if ( problem_dict['status'] == 'unscheduled' or problem_dict['status'][0:9] =='executing' ) :
+        return make_response( problem_dict['status'],
                               202,
                               { 'returncode' : -1 } )
 
       # else return answer immediately.
       else :
         print "Answering immediately\n";
-        return make_response( flask.g.redis.lindex( problemid, 1 ),
+        return make_response( problem_dict['status'],
                               200,
-                              { 'returncode' : flask.g.redis.lindex( problemid, 2 ) } )
+                              { 'returncode' : problem_dict['retcode'] } )
 
 
 # URL to GET questions that have been posted
@@ -90,8 +88,8 @@ def question():
       # Pop from queue, mark as executing, and send problem
       print "Scheduled job with problemid", problemid
       assert( flask.g.redis.exists( problemid ) )
-      flask.g.redis.lset( problemid, 1, "executing" + str( time.time() ) )
-      response = make_response( flask.g.redis.lindex( problemid, 0 ),
+      flask.g.redis.hset( problemid, 'status', "executing" + str( time.time() ) )
+      response = make_response( flask.g.redis.hget( problemid, 'pb' ),
                                 200,
                                 { 'problemid' : problemid } )
     return response
@@ -103,8 +101,8 @@ def answer():
     if ( request.method == 'POST' ):
       id_of_answer = request.headers[ 'problemid' ];
       assert( flask.g.redis.exists( id_of_answer ) )
-      flask.g.redis.lset( id_of_answer, 1, request.data )
-      flask.g.redis.lset( id_of_answer, 2, request.headers[ 'returncode' ] )
+      flask.g.redis.hset( id_of_answer, 'status', request.data )
+      flask.g.redis.hset( id_of_answer, 'retcode', request.headers[ 'returncode' ] )
       return "OK"
 
 if __name__ == "__main__":
