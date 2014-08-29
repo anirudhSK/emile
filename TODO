@@ -4,3 +4,4 @@
 6. Transaction semantics within REDIS.
 7. Apache's arbitrary SIGUSR1 restarts.
 8. Check that UNIX sockets are enabled before starting REDIS.
+9. Test bug fixes to REDIS code.

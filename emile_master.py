@@ -40,9 +40,8 @@ def problem():
       # problemid cannot be in KV, else something is wrong
       assert ( not flask.g.redis.exists( problemid ) )
 
-      # Insert into redis, mark as unscheduled
-      flask.g.redis.hmset( problemid, {'pb': protobuf, 'status' : 'unscheduled', 'retcode' : '-1' } );
-      flask.g.redis.rpush( "queue", problemid )
+      # Insert into work queue
+      flask.g.redis.rpush( "queue", protobuf )
       print "Pushed ",problemid, "into queue"
 
       # return problem id to optimizer
@@ -52,22 +51,19 @@ def problem():
       # optimizer sends problemid
       problemid = request.headers[ 'problemid' ]
 
-      # make sure it exists
-      assert( flask.g.redis.exists( problemid ) )
-
-      # determine current status of problem
+      # determine if it even exists
       problem_dict = flask.g.redis.hgetall( problemid )
 
       # if it's still unscheduled or executing, return Processing to client
-      if ( problem_dict['status'] == 'unscheduled' or problem_dict['status'][0:9] =='executing' ) :
-        return make_response( problem_dict['status'],
+      if ( problem_dict is None ) :
+        return make_response( "processing",
                               202,
                               { 'returncode' : -1 } )
 
       # else return answer immediately.
       else :
         print "Answering immediately\n";
-        return make_response( problem_dict['status'],
+        return make_response( problem_dict['answer'],
                               200,
                               { 'returncode' : problem_dict['retcode'] } )
 
@@ -79,19 +75,18 @@ def question():
     assert ( request.method == 'GET' )
 
     # Dequeue upto one problem
-    problemid = flask.g.redis.lpop( "queue" )
-    if ( problemid is None ):
+    problem_protobuf = flask.g.redis.lpop( "queue" )
+
+    if ( problem_protobuf is None ):
       # No jobs in queue
       response = make_response( "No jobs!", 404 )
 
     else :
-      # Pop from queue, mark as executing, and send problem
+      # send problem
       print "Scheduled job with problemid", problemid
-      assert( flask.g.redis.exists( problemid ) )
-      flask.g.redis.hset( problemid, 'status', "executing" + str( time.time() ) )
-      response = make_response( flask.g.redis.hget( problemid, 'pb' ),
+      response = make_response( problem_protobuf,
                                 200,
-                                { 'problemid' : problemid } )
+                                { 'problemid' : md5.new( problem_protobuf ).hexdigest() } )
     return response
 
 # URL to POST answers from worker
@@ -100,9 +95,9 @@ def answer():
     # worker is POSTing answer
     if ( request.method == 'POST' ):
       id_of_answer = request.headers[ 'problemid' ];
-      assert( flask.g.redis.exists( id_of_answer ) )
-      flask.g.redis.hset( id_of_answer, 'status', request.data )
-      flask.g.redis.hset( id_of_answer, 'retcode', request.headers[ 'returncode' ] )
+      flask.g.redis.hmset( id_of_answer, { 'answer' : request.data,
+                                           'retcode' : request.headers[ 'returncode' ] }
+                         )
       return "OK"
 
 if __name__ == "__main__":
