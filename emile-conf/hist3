@@ -1,0 +1,36 @@
+    1  cd emile/
+    2  ls
+    3  python persistence_tester.py 
+    4  ls
+    5  python optimizer_dummy.py 
+    6  protoc answer.proto 
+    7  protoc answer.proto --python_out=.
+    8  protoc dna.proto --python_out=.
+    9  python optimizer_dummy.py 
+   10  
+   11  python optimizer_dummy.py 
+   12  vim optimizer_dummy.py 
+   13  python optimizer_dummy.py 
+   14  python optimizer_dummy.py /usr/local/google/home/anirudhsk/remy/test.problem
+   15  python optimizer_dummy.py ~/remy/test.problem
+   16  vim optimizer_dummy.py 
+   17  python optimizer_dummy.py ~/remy/test.problem
+   18  vim optimizer_dummy.py 
+   19  python optimizer_dummy.py ~/remy/test.problem 
+   20  vim optimizer_dummy.py 
+   21  python optimizer_dummy.py ~/remy/test.problem 
+   22  vim optimizer_dummy.py 
+   23  python optimizer_dummy.py ~/remy/test.problem 
+   24  vim optimizer_dummy.py 
+   25  python optimizer_dummy.py ~/remy/test.problem 
+   26  python optimizer_dummy.py ~/remy/test.problem  | less
+   27  vim optimizer_dummy.py 
+   28  python optimizer_dummy.py ~/remy/test.problem 
+   29  git diff
+   30  git commit -p
+   31  git config --global user.name "Anirudh Sivaraman"
+   32  git config --global user.email "sk.anirudh@gmail.com"
+   33  git commit --amend --reset-author
+   34  git commit -p
+   35  python optimizer_dummy.py ~/remy/test.problem 
+   36  history >> /tmp/hist3

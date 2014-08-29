@@ -1,0 +1,6 @@
+    1  cd emile/
+    2  python emile_worker.py 
+    3  vim emile_worker.py 
+    4  python emile_worker.py 
+    5  python emile_worker.py ~/remy/src/rat-runner
+    6  history >> /tmp/hist2

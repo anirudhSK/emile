@@ -1,0 +1,8 @@
+    1  cd remy/
+    2  ls
+    3  ./unittests/http_tester 
+    4  ./unittests/mock_remy 
+    5  vim unittests/mock_remy.cc 
+    6  ./unittests/mock_remy 
+    7  HTTP_HOST=www.emile.com ./unittests/mock_remy 
+    8  history >> /tmp/hist4

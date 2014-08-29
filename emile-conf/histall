@@ -1,0 +1,21 @@
+sudo apt-get install apache2 python-pip libcurl4-openssl-dev libboost-all-dev libprotobuf-dev protobuf-compiler git libapache2-mod-wsgi redis-server autoconf build-essential libtool pkg-config htop
+sudo pip install flask
+sudo pip install redis
+sudo pip install protobuf
+sudo vim /etc/redis/redis.conf  # for UNIX socket
+sudo chown www-data /var/run/redis/redis.sock # for apache to use it.
+sudo service redis-server restart
+sudo service apache2 stop
+sudo python emile_master.py 
+git config --global user.name "Anirudh Sivaraman"
+git config --global user.email "sk.anirudh@gmail.com"
+git commit --amend --reset-author
+cd /var/www
+mkdir emile_master
+sudo mkdir emile_master
+sudo cp ~/emile/emile_master.py ~/emile/emile_master.wsgi emile_master/
+sudo chown -R www-data emile_master/
+sudo cp ~/emile/emile_master.conf /etc/apache2/sites-enabled/
+sudo service apache2 restart
+sudo vim /etc/apache2/apache2.conf  # For keep alive information
+How do I prevent SIGUSR1 errors?

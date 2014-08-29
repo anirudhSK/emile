@@ -1,0 +1,139 @@
+    1  ls
+    2  cat /proc/cpuinfo 
+    3  sudo apt-get install apache2 pip libcurl4-openssl-dev libboost-all-dev libprotobuf-dev protobuf-compiler 
+    4  sudo apt-get install apache2 python-pip libcurl4-openssl-dev libboost-all-dev libprotobuf-dev protobuf-compiler 
+    5  sudo apt-get install apache2 python-pip libcurl4-openssl-dev libboost-all-dev libprotobuf-dev protobuf-compiler git
+    6  git clone https://github.com/anirudhsk/emile.git
+    7  git clone https://github.com/keithw/remy.git
+    8  cd emile/
+    9  ls
+   10  sudo pip install flask
+   11  echo $?
+   12  python
+   13  sudo apt-get install redis-server 
+   14  sudo pip install redis-py
+   15  sudo pip install redis
+   16  sudo apt-get install apache2 python-pip libcurl4-openssl-dev libboost-all-dev libprotobuf-dev protobuf-compiler git libapache2-mod-wsgi
+   17  sudo apt-get install apache2 python-pip libcurl4-openssl-dev libboost-all-dev libprotobuf-dev protobuf-compiler git libapache2-mod-wsgi redis-server
+   18  sudo apt-get install apache2 python-pip libcurl4-openssl-dev libboost-all-dev libprotobuf-dev protobuf-compiler git libapache2-mod-wsgi redis-server autoconf build-essential
+   19  sudo apt-get install apache2 python-pip libcurl4-openssl-dev libboost-all-dev libprotobuf-dev protobuf-compiler git libapache2-mod-wsgi redis-server autoconf build-essential libtool
+   20  sudo apt-get install apache2 python-pip libcurl4-openssl-dev libboost-all-dev libprotobuf-dev protobuf-compiler git libapache2-mod-wsgi redis-server autoconf build-essential libtool pkg-config
+   21  python emile_worker.py 
+   22  sudo python emile_master.py 
+   23  vim /etc/redis/redis.conf 
+   24  sudo vim /etc/redis/redis.conf 
+   25  sudo service redis-server restart
+   26  sudo python emile_master.py 
+   27  sudo service apache2 stop
+   28  sudo python emile_master.py 
+   29  history > /tmp/hist1
+   30  cd emile/
+   31  python emile_worker.py 
+   32  vim emile_worker.py 
+   33  python emile_worker.py 
+   34  python emile_worker.py ~/remy/src/rat-runner
+   35  history >> /tmp/hist2
+   36  cd emile/
+   37  ls
+   38  python persistence_tester.py 
+   39  ls
+   40  python optimizer_dummy.py 
+   41  protoc answer.proto 
+   42  protoc answer.proto --python_out=.
+   43  protoc dna.proto --python_out=.
+   44  python optimizer_dummy.py 
+   45  sudo pip install protobuf
+   46  python optimizer_dummy.py 
+   47  vim optimizer_dummy.py 
+   48  python optimizer_dummy.py 
+   49  python optimizer_dummy.py /usr/local/google/home/anirudhsk/remy/test.problem
+   50  python optimizer_dummy.py ~/remy/test.problem
+   51  vim optimizer_dummy.py 
+   52  python optimizer_dummy.py ~/remy/test.problem
+   53  vim optimizer_dummy.py 
+   54  python optimizer_dummy.py ~/remy/test.problem 
+   55  vim optimizer_dummy.py 
+   56  python optimizer_dummy.py ~/remy/test.problem 
+   57  vim optimizer_dummy.py 
+   58  python optimizer_dummy.py ~/remy/test.problem 
+   59  vim optimizer_dummy.py 
+   60  python optimizer_dummy.py ~/remy/test.problem 
+   61  python optimizer_dummy.py ~/remy/test.problem  | less
+   62  vim optimizer_dummy.py 
+   63  python optimizer_dummy.py ~/remy/test.problem 
+   64  git diff
+   65  git commit -p
+   66  git config --global user.name "Anirudh Sivaraman"
+   67  git config --global user.email "sk.anirudh@gmail.com"
+   68  git commit --amend --reset-author
+   69  git commit -p
+   70  python optimizer_dummy.py ~/remy/test.problem 
+   71  history >> /tmp/hist3
+   72  cd remy/
+   73  ls
+   74  ./unittests/http_tester 
+   75  ./unittests/mock_remy 
+   76  vim unittests/mock_remy.cc 
+   77  ./unittests/mock_remy 
+   78  HTTP_HOST=www.emile.com ./unittests/mock_remy 
+   79  history >> /tmp/hist4
+   80  cd /tmp/
+   81  ls
+   82  vim hist1
+   83  cp /tmp/hist1 ~
+   84  ls
+   85  cd ~
+   86  ls
+   87  cd emile/
+   88  git push origin master
+   89  ls
+   90  cd ..
+   91  ls
+   92  cd emile/
+   93  git log
+   94  ls
+   95  cd /var/www
+   96  vim ~/hist1 
+   97  ls
+   98  mkdir emile_master
+   99  sudo mkdir emile_master
+  100  sudo chown www-data emile_master/
+  101  cp ~/emile/emile_master.py ~/emile/emile_master.wsgi emile_master/
+  102  sudo cp ~/emile/emile_master.py ~/emile/emile_master.wsgi emile_master/
+  103  sudo chown -R www-data emile_master/
+  104  ls emile_master/ -al
+  105  sudo cp ~/emile/emile_master.conf /etc/apache2/sites-enabled/
+  106  cd /etc/apache2/sites-enabled/
+  107  ls -alth
+  108  cd ..
+  109  cd ~/emile/
+  110  sudo service apache2 restart
+  111  vim /var/log/apache2/error.log 
+  112  sudo chown www-data /var/run/redis/redis.sock 
+  113  sudo service apache2 restart
+  114  vim /var/log/apache2/error.log 
+  115  sudo vim /etc/apache2/apache2.conf 
+  116  sudo service apache2 restart
+  117  vim /var/log/apache2/error.log 
+  118  vim /var/log/apache2/access.log 
+  119  vim /var/log/apache2/other_vhosts_access.log 
+  120  sudo service apache2 restart
+  121  vim /var/log/apache2/other_vhosts_access.log 
+  122  date
+  123  fg
+  124  vim /var/log/apache2/error.log 
+  125  cd /var/www/emile_master/
+  126  ls
+  127  vim emile_master.py
+  128  sudo vim emile_master.py
+  129  sudo service apache2 restart
+  130  vim /var/log/apache2/error.log 
+  131  vim /var/log/apache2/other_vhosts_access.log 
+  132  tail -f /var/log/apache2/other_vhosts_access.log 
+  133  vim /var/log/apache2/error.log 
+  134  sudo vim emile_master.py
+  135  sudo 
+  136  sudo apt-get install htop
+  137  htop
+  138  history
+  139  history > /tmp/hist-resume

@@ -1,0 +1,12 @@
+sudo apt-get install apache2 python-pip libcurl4-openssl-dev libboost-all-dev libprotobuf-dev protobuf-compiler git libapache2-mod-wsgi redis-server autoconf build-essential libtool pkg-config
+sudo pip install flask
+sudo pip install redis
+sudo pip install protobuf
+vim /etc/redis/redis.conf 
+sudo vim /etc/redis/redis.conf  # for UNIX socket
+sudo service redis-server restart
+sudo python emile_master.py 
+sudo service apache2 stop
+sudo python emile_master.py 
+git config --global user.name "Anirudh Sivaraman"
+git config --global user.email "sk.anirudh@gmail.com"
